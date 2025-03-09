@@ -1,3 +1,5 @@
+**EKS-Terraform: Deploying a Python App on AWS EKS**
+
 This project automates the deployment of a Python application on Amazon EKS using Terraform and Kubernetes. It provisions the necessary AWS infrastructure, including VPC, subnets, security groups, and an EKS cluster, and deploys a containerized Python application with Kubernetes manifests.
 
 **Features**
@@ -58,35 +60,36 @@ Before running the project, ensure you have:
 
 **Setup & Deployment**
 
-Step 1: Clone the Repository
+**Step 1: Clone the Repository**
+
 ```
 git clone https://github.com/your-repo/eks-terraform.git
 cd eks-terraform
 ```
-Step 2: Initialize Terraform
+**Step 2: Initialize Terraform**
 ```
 terraform init
 ```
 
-Step 3: Plan and Apply Terraform Configuration
+**Step 3: Plan and Apply Terraform Configuration**
 ```
 terraform plan
 terraform apply -auto-approve
 ```
 
-Step 4: Verify EKS Cluster
+**Step 4: Verify EKS Cluster**
 ```
 aws eks --region us-east-1 update-kubeconfig --name eks-python-cluster
 kubectl get nodes
 ```
 
-Step 5: Deploy Python App to EKS
+**Step 5: Deploy Python App to EKS**
 ```
 kubectl apply -f k8s/python-app-deployment.yaml
 kubectl apply -f k8s/python-app-service.yaml
 ```
 
-Step 6: Get the Application URL
+**Step 6: Get the Application URL**
 ```
 kubectl get svc python-app-service
 ```
