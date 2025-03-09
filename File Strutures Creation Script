@@ -1,0 +1,208 @@
+#!/bin/bash
+
+# Define the root directory
+ROOT_DIR="eks-terraform"
+
+# Create directory structure
+mkdir -p $ROOT_DIR/k8s
+mkdir -p $ROOT_DIR/modules/eks
+mkdir -p $ROOT_DIR/modules/vpc
+mkdir -p $ROOT_DIR/.terraform
+
+# Create Kubernetes YAML files
+cat <<EOF > $ROOT_DIR/k8s/python-app-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: python-app
+  template:
+    metadata:
+      labels:
+        app: python-app
+    spec:
+      containers:
+        - name: python-app
+          image: your-docker-image:latest
+          ports:
+            - containerPort: 5000
+EOF
+
+cat <<EOF > $ROOT_DIR/k8s/python-app-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-app-service
+spec:
+  selector:
+    app: python-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
+EOF
+
+# Create main Terraform files
+cat <<EOF > $ROOT_DIR/main.tf
+module "vpc" {
+  source              = "./modules/vpc"
+  vpc_cidr_block      = var.vpc_cidr_block
+  subnet_1_cidr       = var.subnet_1_cidr
+  subnet_2_cidr       = var.subnet_2_cidr
+  availability_zone_1 = var.availability_zone_1
+  availability_zone_2 = var.availability_zone_2
+  tags               = var.tags
+}
+
+module "eks" {
+  source            = "./modules/eks"
+  cluster_name      = var.cluster_name
+  vpc_id           = module.vpc.vpc_id
+  subnet_1_id      = module.vpc.subnet_1_id
+  subnet_2_id      = module.vpc.subnet_2_id
+  security_group_id = module.vpc.eks_security_group_id
+}
+EOF
+
+# Create provider.tf
+cat <<EOF > $ROOT_DIR/provider.tf
+provider "aws" {
+  region = "us-east-1"
+}
+EOF
+
+# Create terraform.tfvars
+cat <<EOF > $ROOT_DIR/terraform.tfvars
+vpc_cidr_block = "172.31.0.0/16"
+subnet_1_cidr  = "172.31.1.0/24"
+subnet_2_cidr  = "172.31.2.0/24"
+availability_zone_1 = "us-east-1a"
+availability_zone_2 = "us-east-1b"
+cluster_name = "eks-python-cluster"
+tags = {
+  Environment = "Development"
+}
+EOF
+
+# Create variables.tf
+cat <<EOF > $ROOT_DIR/variables.tf
+variable "vpc_cidr_block" {}
+variable "subnet_1_cidr" {}
+variable "subnet_2_cidr" {}
+variable "availability_zone_1" {}
+variable "availability_zone_2" {}
+variable "cluster_name" {}
+variable "tags" {
+  type = map(string)
+}
+EOF
+
+# Create modules/vpc/main.tf
+cat <<EOF > $ROOT_DIR/modules/vpc/main.tf
+resource "aws_vpc" "main" {
+  cidr_block = var.vpc_cidr_block
+  tags       = var.tags
+}
+
+resource "aws_subnet" "subnet_1" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.subnet_1_cidr
+  availability_zone = var.availability_zone_1
+}
+
+resource "aws_subnet" "subnet_2" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.subnet_2_cidr
+  availability_zone = var.availability_zone_2
+}
+
+resource "aws_security_group" "eks_sg" {
+  vpc_id = aws_vpc.main.id
+}
+EOF
+
+# Create modules/vpc/variables.tf
+cat <<EOF > $ROOT_DIR/modules/vpc/variables.tf
+variable "vpc_cidr_block" {}
+variable "subnet_1_cidr" {}
+variable "subnet_2_cidr" {}
+variable "availability_zone_1" {}
+variable "availability_zone_2" {}
+variable "tags" {
+  type = map(string)
+}
+EOF
+
+# Create modules/vpc/outputs.tf
+cat <<EOF > $ROOT_DIR/modules/vpc/outputs.tf
+output "vpc_id" {
+  value = aws_vpc.main.id
+}
+
+output "subnet_1_id" {
+  value = aws_subnet.subnet_1.id
+}
+
+output "subnet_2_id" {
+  value = aws_subnet.subnet_2.id
+}
+
+output "eks_security_group_id" {
+  value = aws_security_group.eks_sg.id
+}
+EOF
+
+# Create modules/eks/main.tf
+cat <<EOF > $ROOT_DIR/modules/eks/main.tf
+resource "aws_eks_cluster" "eks_cluster" {
+  name     = var.cluster_name
+  role_arn = "arn:aws:iam::471112556180:role/eks-role"
+
+  vpc_config {
+    subnet_ids         = [var.subnet_1_id, var.subnet_2_id]
+    security_group_ids = [var.security_group_id]
+  }
+}
+EOF
+
+# Create modules/eks/variables.tf
+cat <<EOF > $ROOT_DIR/modules/eks/variables.tf
+variable "cluster_name" {}
+variable "vpc_id" {}
+variable "subnet_1_id" {}
+variable "subnet_2_id" {}
+variable "security_group_id" {}
+EOF
+
+# Create modules/eks/outputs.tf
+cat <<EOF > $ROOT_DIR/modules/eks/outputs.tf
+output "eks_cluster_id" {
+  value = aws_eks_cluster.eks_cluster.id
+}
+EOF
+
+# Create passrole-policy.json
+cat <<EOF > $ROOT_DIR/passrole-policy.json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::471112556180:role/eks-role"
+        }
+    ]
+}
+EOF
+
+# Initialize Git and push to GitHub
+cd $ROOT_DIR
+git init
+git add .
+git commit -m "Initial commit for Terraform EKS setup"
+echo "🎉 All files and directories created! Ready to use Terraform."
