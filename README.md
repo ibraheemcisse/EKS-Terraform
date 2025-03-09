@@ -3,14 +3,20 @@ This project automates the deployment of a Python application on Amazon EKS usin
 **Features**
 
 ✅ Infrastructure as Code (IaC) using Terraform
+
 ✅ Automated VPC, subnets, and security group creation
+
 ✅ EKS Cluster provisioning for Kubernetes workloads
+
 ✅ Kubernetes Deployment and Service for Python App
+
 ✅ Load Balancer for external access
+
 ✅ Modular Terraform structure for reusability
 
 **Project Structure**
 
+```
 eks-terraform/
 │── k8s/                          # Kubernetes manifests  
 │   ├── python-app-deployment.yaml  
@@ -33,15 +39,20 @@ eks-terraform/
 │── variables.tf                     # Input variables  
 │── passrole-policy.json              # IAM role permissions  
 │── README.md                         # Project Documentation  
+```
 
 **Prerequisites**
 
 Before running the project, ensure you have:
 
 -Terraform installed (≥ v1.0)
+
 -AWS CLI configured with necessary permissions
+
 -kubectl installed for managing the Kubernetes cluster
+
 -Docker installed for building container images
+
 -Git for version control
 
 
@@ -84,5 +95,7 @@ Copy the EXTERNAL-IP and access your app in the browser.
 **Next Steps**
 
 -Implement CI/CD with GitHub Actions or GitLab CI/CD
+
 -Add monitoring using Prometheus & Grafana
+
 -Enable autoscaling for the Python app
