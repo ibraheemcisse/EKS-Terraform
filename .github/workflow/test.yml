@@ -1,0 +1,16 @@
+name: Testing mu code 
+
+on: push
+
+jobs: 
+  first_job:
+       runs on: ubuntu_latest 
+       steps:
+       - name: Welcoem Message 
+         run: echo "My First github actions job" 
+
+        -name: List files 
+         run: ls
+
+        -name: Read files 
+         run: cat README.md
