@@ -4,16 +4,16 @@ on: push
 
 jobs:
   first_job:
-    runs-on: ubuntu-latest  # Fixed "ubuntu_latest" to "ubuntu-latest"
+    runs-on: ubuntu-latest  
     
     steps:
       - name: Checkout repo 
         uses: actions/checkout@v4
         
-      - name: Welcome Message  # Fixed "Welcoem" typo
+      - name: Welcome Message  
         run: echo "My First GitHub Actions job"
 
-      - name: List files  # Fixed "-name" to "- name"
+      - name: List and Read file  
         run: 
           echo "My first Github Actions Job"
           ls -ltra
@@ -22,5 +22,5 @@ jobs:
       - name: Generate ASCII ARtwork 
         run: cowsay -f daragon "run for ur life" >> dragon.txt
 
-    #  - name: Read files  # Fixed "-name" to "- name"
+    #  - name: Read files  
     #    run: cat README.md
