@@ -14,7 +14,7 @@ jobs:
         run: sudo apt-get install cowsay -y 
 
       - name: Execute Cowsay CMD 
-        run: cowsay -f rabbit "run for ur life rawrrrrrrrrr" >> dragon.txt 
+        run: cowsay -f dragon "run for ur life rawrrrrrrrrr" >> dragon.txt 
 
       - name: Test file exists 
         run: grep -i "." dragon.txt 
