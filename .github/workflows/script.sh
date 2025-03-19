@@ -1,7 +1,8 @@
-    #/bin/sh
-    
-    sudo apt-get install cowsay -y 
-    cowsay -f dragon "run for ur life rawrrrrrrrrr" >> dragon.txt 
-    run: grep -i "." dragon.txt 
-    cat dragon.txt 
-    ls -ltra
+#!/bin/sh
+
+sudo apt-get update
+sudo apt-get install -y cowsay
+cowsay -f dragon "run for ur life rawrrrrrrrrr" >> dragon.txt
+grep -i "." dragon.txt
+cat dragon.txt
+ls -ltra

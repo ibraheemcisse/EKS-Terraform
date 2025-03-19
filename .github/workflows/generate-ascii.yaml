@@ -1,20 +1,20 @@
-name: Generate ASCII artwork 
+name: Generate ASCII artwork
 
 on: push
 
 jobs:
   ascii_job:
     runs-on: ubuntu-latest  
-    
+
     steps:
       - name: Checkout repo 
         uses: actions/checkout@v4
         
       - name: List Repo Files
         run: ls -ltra
-      
+
+      - name: Make script executable
+        run: chmod +x ./script.sh  # Make sure script.sh is executable
+
       - name: Executing shell 
         run: ./script.sh
-
-    #  - name: Read files  
-    #    run: cat README.md
