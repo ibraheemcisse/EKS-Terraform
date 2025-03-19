@@ -1,0 +1,17 @@
+name: Testing my code
+
+on: push
+
+jobs:
+  first_job:
+    runs-on: ubuntu-latest  # Fixed "ubuntu_latest" to "ubuntu-latest"
+    
+    steps:
+      - name: Welcome Message  # Fixed "Welcoem" typo
+        run: echo "My First GitHub Actions job"
+
+      - name: List files  # Fixed "-name" to "- name"
+        run: ls
+
+      - name: Read files  # Fixed "-name" to "- name"
+        run: cat README.md
