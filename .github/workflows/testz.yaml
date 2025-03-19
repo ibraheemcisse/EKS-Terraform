@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest  # Fixed "ubuntu_latest" to "ubuntu-latest"
     
     steps:
+      - name: Checkout repo 
+        uses: actions/checkout@v4
+        
       - name: Welcome Message  # Fixed "Welcoem" typo
         run: echo "My First GitHub Actions job"
 
