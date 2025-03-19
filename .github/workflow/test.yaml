@@ -1,16 +1,17 @@
-name: Testing my code 
+name: Testing my code
 
 on: push
 
-jobs: 
+jobs:
   first_job:
-       runs on: ubuntu_latest 
-       steps:
-       - name: Welcoem Message 
-         run: echo "My First github actions job" 
+    runs-on: ubuntu-latest  # Fixed "ubuntu_latest" to "ubuntu-latest"
+    
+    steps:
+      - name: Welcome Message  # Fixed "Welcoem" typo
+        run: echo "My First GitHub Actions job"
 
-        -name: List files 
-         run: ls
+      - name: List files  # Fixed "-name" to "- name"
+        run: ls
 
-        -name: Read files 
-         run: cat README.md
+      - name: Read files  # Fixed "-name" to "- name"
+        run: cat README.md
