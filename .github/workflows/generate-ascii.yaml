@@ -15,6 +15,7 @@ jobs:
 
       - name: Make script executable
         run: chmod +x ./script.sh  # Make sure script.sh is executable
+        ./script.sh
 
       - name: Executing shell 
         run: ./script.sh
