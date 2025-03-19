@@ -14,7 +14,13 @@ jobs:
         run: echo "My First GitHub Actions job"
 
       - name: List files  # Fixed "-name" to "- name"
-        run: ls
+        run: 
+          echo "My first Github Actions Job"
+          ls -ltra
+          cat README.md
 
-      - name: Read files  # Fixed "-name" to "- name"
-        run: cat README.md
+      - name: Generate ASCII ARtwork 
+        run: cowsay -f daragon "run for ur life" >> dragon.txt
+
+    #  - name: Read files  # Fixed "-name" to "- name"
+    #    run: cat README.md
